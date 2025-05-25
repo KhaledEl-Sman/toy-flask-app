@@ -1,0 +1,38 @@
+name: Production Deployment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  lint-build-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install flake8
+        run: pip install flake8
+
+      - name: Run flake8 linting
+        run: flake8 src/
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build Docker image
+        run: docker build -t toy-flask-app:latest .
+
+      - name: Tag Docker image for Docker Hub
+        run: docker tag toy-flask-app:latest ${{ secrets.DOCKERHUB_USERNAME }}/toy-flask-app:latest
+
+      - name: Push Docker image to Docker Hub
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/toy-flask-app:latest
