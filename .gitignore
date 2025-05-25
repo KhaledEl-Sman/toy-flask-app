@@ -1,0 +1,54 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test and coverage files
+coverage.*
+.tox/
+.nox/
+.pytest_cache/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# VS Code / IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.bak
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Docker-related
+*.tar
+*.pid
+
+# Python environment files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Project-specific
+.env
+.env.*
+*.db
+
+# Ignore image artifacts (optional)
+*.tar
+*.img
+
+# Ignore Docker build cache if present
+.docker/
+
+# GitHub Actions secrets or local overrides (don't commit if they exist)
+.github/workflows/*.local.yml
