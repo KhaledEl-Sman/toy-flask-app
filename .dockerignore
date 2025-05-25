@@ -1,6 +1,5 @@
 .git
 .github
-tests
 README.md
 LICENSE
 *.pyc
