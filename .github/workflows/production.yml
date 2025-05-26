@@ -82,7 +82,8 @@ jobs:
         id: get_ip
         run: |
           set -euo pipefail
-          ec2_ip=$(terraform -chdir=terraform output -raw elastic_ip 2>/dev/null)
+          unset TF_LOG
+          ec2_ip=$(terraform -chdir=terraform output -raw elastic_ip 2>/dev/null | head -n 1)
           echo "DEBUG: ec2_ip='$ec2_ip'"
           echo "ec2_ip=$ec2_ip" >> $GITHUB_ENV
           echo "ec2_ip=$ec2_ip" >> $GITHUB_OUTPUT
