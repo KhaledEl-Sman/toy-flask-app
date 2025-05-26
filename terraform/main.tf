@@ -121,18 +121,6 @@ resource "aws_instance" "ec2_instance" {
   associate_public_ip_address = true
   key_name                  = aws_key_pair.ssh_key.key_name
 
-  user_data = <<EOF
-#cloud-config
-runcmd:
-  - sudo apt-get update -y
-  - sudo apt-get install -y docker.io
-  - sudo systemctl enable docker
-  - sudo systemctl start docker
-  - sudo usermod -aG docker ubuntu
-  - sudo docker run -d -p 80:5000 --name botit elsman2020/toy-flask-app:latest
-  - sudo echo "User data executed successfully" > /var/log/user_data.log
-EOF
-
   tags = {
     Name                    = "${var.project_name_prefix}_ec2_instance"
   }
