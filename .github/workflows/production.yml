@@ -81,7 +81,9 @@ jobs:
       - name: Get EC2 Public IP
         id: get_ip
         run: |
-          ec2_ip=$(terraform output -raw elastic_ip)
+          set -euo pipefail
+          ec2_ip=$(terraform output -raw elastic_ip 2>/dev/null)
+          echo "DEBUG: ec2_ip='$ec2_ip'"
           echo "ec2_ip=$ec2_ip" >> $GITHUB_ENV
           echo "ec2_ip=$ec2_ip" >> $GITHUB_OUTPUT
 
