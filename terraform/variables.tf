@@ -1,5 +1,4 @@
 variable "project_name_prefix" {default = "botit"}
-variable "aws_region" {}
 variable "domain_name" {default = "zevar.me"}
 variable "vpc_cidr" {default = "10.0.0.0/16"}
 variable "subnet_az" {default = "eu-west-1c"}
