@@ -5,3 +5,7 @@ output "elastic_ip" {
 output "domain" {
   value = var.domain_name
 }
+
+output "security_group_id" {
+  value = aws_security_group.sg.id
+}
