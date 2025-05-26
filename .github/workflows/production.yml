@@ -85,7 +85,6 @@ jobs:
         run: |
           set -euo pipefail
           ec2_ip=$(terraform -chdir=terraform output -raw elastic_ip 2>/dev/null)
-          echo "DEBUG: ec2_ip='$ec2_ip'"
           echo "ec2_ip=$ec2_ip" >> $GITHUB_ENV
           echo "ec2_ip=$ec2_ip" >> $GITHUB_OUTPUT
 
@@ -98,6 +97,7 @@ jobs:
       - name: Wait for SSH
         run: |
           for i in {1..30}; do
+            echo "Checking SSH connectivity to ${{ steps.get_ip.outputs.ec2_ip }} (attempt $i)..."
             nc -zv ${{ steps.get_ip.outputs.ec2_ip }} 22 && break
             echo "Waiting for SSH..." && sleep 10
           done
