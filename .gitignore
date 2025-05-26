@@ -52,3 +52,11 @@ pip-delete-this-directory.txt
 
 # GitHub Actions secrets or local overrides (don't commit if they exist)
 .github/workflows/*.local.yml
+
+
+#terraform
+terraform/.terraform/*
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfvars
+terraform/crash.log

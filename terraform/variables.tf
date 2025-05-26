@@ -1,0 +1,10 @@
+variable "project_name_prefix" {}
+variable "domain_name" {}
+variable "aws_region" {}
+variable "vpc_cidr" {}
+variable "subnet_az" {}
+variable "subnet_cidr" {}
+variable "instance_type" {}
+variable "aws_profile_name" {}
+variable "ssh_cidr_block" {}
+variable "ssh_file_location" {}
