@@ -82,6 +82,7 @@ jobs:
         id: get_ip
         working-directory: ./terraform
         run: |
+          echo "ec2_ip=$(terraform output -raw elastic_ip)" >> $GITHUB_ENV
           echo "ec2_ip=$(terraform output -raw elastic_ip)" >> $GITHUB_OUTPUT
 
       - name: Install Ansible
