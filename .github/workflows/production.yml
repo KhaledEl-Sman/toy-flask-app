@@ -51,6 +51,10 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
 
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      SECURITY_GROUP_ID: your-security-group-id   # <-- Replace with your actual SG ID
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -88,6 +92,18 @@ jobs:
           echo "ec2_ip=$ec2_ip" >> $GITHUB_ENV
           echo "ec2_ip=$ec2_ip" >> $GITHUB_OUTPUT
 
+      - name: Get GitHub Actions runner public IP
+        id: get_runner_ip
+        run: echo "RUNNER_IP=$(curl -s https://api.ipify.org)/32" >> $GITHUB_ENV
+
+      - name: Add runner IP to security group ingress (allow SSH)
+        run: |
+          aws ec2 authorize-security-group-ingress --group-id ${{ env.SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ env.RUNNER_IP }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+
       - name: Install Ansible
         run: |
           sudo apt-get update
@@ -112,3 +128,12 @@ jobs:
           echo "[ec2]" > inventory.ini
           echo "${{ steps.get_ip.outputs.ec2_ip }}" >> inventory.ini
           ansible-playbook -i inventory.ini ansible/playbook.yml --user ubuntu --private-key key.pem
+
+      - name: Remove runner IP from security group ingress (revoke SSH)
+        if: always()
+        run: |
+          aws ec2 revoke-security-group-ingress --group-id ${{ env.SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ env.RUNNER_IP }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
