@@ -5,6 +5,5 @@ variable "vpc_cidr" {}
 variable "subnet_az" {}
 variable "subnet_cidr" {}
 variable "instance_type" {}
-variable "aws_profile_name" {}
 variable "ssh_cidr_block" {}
 variable "ssh_file_location" {}
