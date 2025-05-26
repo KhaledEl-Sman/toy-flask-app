@@ -103,7 +103,7 @@ data "aws_ami" "latest_ubuntu_server_image" {
 
 resource "aws_key_pair" "ssh_key" {
   key_name                  = "${var.project_name_prefix}_ssh_key"
-  public_key                = file(var.ssh_file_location)
+  public_key                = var.ssh_public_key #file(var.ssh_file_location)
 
   tags = {
     Name                    = "${var.project_name_prefix}_ssh_key"
