@@ -1,0 +1,11 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src:/app/src
+    environment:
+      - FLASK_APP=src/hello.py
+      - FLASK_RUN_HOST=0.0.0.0
