@@ -1,0 +1,43 @@
+---
+- name: Setup Docker and run Flask app container on EC2
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+
+    - name: Install Docker package
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Ensure Docker service is enabled and started
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Add ubuntu user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Run Flask app container
+      docker_container:
+        name: botit
+        image: elsman2020/toy-flask-app:latest
+        state: started
+        restart_policy: always
+        published_ports:
+          - "80:5000"
+
+    - name: Write success log
+      copy:
+        content: "Ansible playbook executed successfully\n"
+        dest: /var/log/ansible_docker_setup.log
+        owner: root
+        group: root
+        mode: '0644'
