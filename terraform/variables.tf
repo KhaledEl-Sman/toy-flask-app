@@ -1,6 +1,5 @@
 variable "project_name_prefix" {}
 variable "domain_name" {}
-variable "aws_region" {}
 variable "vpc_cidr" {}
 variable "subnet_az" {}
 variable "subnet_cidr" {}
