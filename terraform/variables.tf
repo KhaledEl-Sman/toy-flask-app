@@ -5,3 +5,4 @@ variable "subnet_az" {default = "eu-west-1c"}
 variable "subnet_cidr" {default = "10.0.0.0/20"}
 variable "instance_type" {default = "t3.micro"}
 variable "ssh_cidr_block" {default = "78.47.221.219/32"}
+variable "ssh_public_key" {}
