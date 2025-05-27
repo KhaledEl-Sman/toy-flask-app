@@ -93,14 +93,14 @@ jobs:
         id: get_ip
         run: |
           set -euo pipefail
-          ec2_ip=$(terraform -chdir=terraform output -raw elastic_ip 2>/dev/null)
+          ec2_ip=$(terraform -chdir=terraform/dev output -raw elastic_ip 2>/dev/null)
           echo "ec2_ip=$ec2_ip" >> $GITHUB_ENV
           echo "ec2_ip=$ec2_ip" >> $GITHUB_OUTPUT
 
       - name: Get Security Group ID
         id: get_sg
         run: |
-          sg_id=$(terraform -chdir=terraform output -raw security_group_id)
+          sg_id=$(terraform -chdir=terraform/dev output -raw security_group_id)
           echo "SECURITY_GROUP_ID=$sg_id" >> $GITHUB_ENV
           echo "SECURITY_GROUP_ID=$sg_id" >> $GITHUB_OUTPUT
 
