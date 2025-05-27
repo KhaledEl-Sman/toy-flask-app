@@ -55,11 +55,7 @@ pip-delete-this-directory.txt
 
 
 #terraform
-terraform/prod/.terraform/*
-terraform/dev/.terraform/*
-terraform/prod/*.tfstate
-terraform/prod/*.tfstate.*
-terraform/prod/*.tfvars
-terraform/dev/*.tfstate
-terraform/dev/*.tfstate.*
-terraform/dev/*.tfvars
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfvars
