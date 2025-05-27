@@ -1,8 +1,0 @@
-project_name_prefix     = "dev-botit"
-domain_name             = "terraform.tfvars"
-vpc_cidr                = "10.1.0.0/16"
-subnet_az               = "eu-west-1b"
-subnet_cidr             = "10.1.0.0/20"
-instance_type           = "t3.micro"
-ssh_cidr_block          = "78.47.221.219/32"
-ssh_public_key          = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCbAn+xWfX9B/JgLfQgmkgXTFvxDqLeSVM1kY+mhNIhJvTSACUFNYjB49KLdgsQoRvALB0IRIKEvD5/iDpiVJmP5oIjabs8GsFBTNh8QYj8lgRbawlG6LedUq+fmWA03S0qZoeZQilWmE2HoQT31Dq+oLIoKnRU7lu5ojJOe6PIdlL8pgS7kwbwv8hKSJG0woQR+1PUoHMlGWZYgmuELB9GC8F+5Sjz+lfIqpgvjsamw07ZrmEInImgs2AwHIwDKbgdYuRj6bos1yXMwVtB6Ueeu40p22ye7SgjIMwux05xnz3raNbz66Al0QTL/SYV02bEHaBzYIBulR6yiqU1vg+WIwEEr0viq/1Pp1Pnx5euyfeRI3T5LljB0pbS3nokOh8gcK0DPOGcyuA5dCguoB+NgPZdbti3lG0SqhkA14G8RkiZXJzNh5JWLdgWqbkJvPjB4JSUyel3BUcQHHwuDxsOHpOkEHv2Kddjg8aXk+smFsV5wq1iQTaEgyNu6QuRuay/OmuzMsCj84MtShnS1HPW3ZDENNtYS/boRZ75djZHVI646JtTX6kdt7F4r+jHu0pD/etI2Nblae2hsemau8xfAz83uAqLozV25x1gjj0pBh6od6UIZwfNidA4wa7ZVqzRJOhDr8tEaTu1aNojfHV1QnIU229rhBMlTGLxWMYUcw== elsman@El-Sman"
