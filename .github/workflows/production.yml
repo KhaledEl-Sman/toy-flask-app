@@ -1,9 +1,15 @@
 name: Production CI
 
 on:
+<<<<<<< HEAD
   pull_request:
     branches:
       - main
+=======
+  push:
+    branches:
+      - dev
+>>>>>>> eef008a638678bce4206773ac7920195cdac3e2e
   workflow_dispatch:
 
 jobs:
