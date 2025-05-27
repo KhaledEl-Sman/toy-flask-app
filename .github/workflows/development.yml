@@ -52,3 +52,100 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/toy-flask-app:dev
             ${{ secrets.DOCKERHUB_USERNAME }}/toy-flask-app:dev-${{ env.DATE_TAG }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Terraform Init
+        working-directory: ./terraform
+        run: terraform init
+
+      - name: Terraform Apply
+        working-directory: ./terraform
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+          TF_VAR_ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
+        run: terraform apply -auto-approve
+
+      - name: Get EC2 Public IP
+        id: get_ip
+        run: |
+          set -euo pipefail
+          ec2_ip=$(terraform -chdir=terraform output -raw elastic_ip 2>/dev/null)
+          echo "ec2_ip=$ec2_ip" >> $GITHUB_ENV
+          echo "ec2_ip=$ec2_ip" >> $GITHUB_OUTPUT
+
+      - name: Get Security Group ID
+        id: get_sg
+        run: |
+          sg_id=$(terraform -chdir=terraform output -raw security_group_id)
+          echo "SECURITY_GROUP_ID=$sg_id" >> $GITHUB_ENV
+          echo "SECURITY_GROUP_ID=$sg_id" >> $GITHUB_OUTPUT
+
+      - name: Get GitHub Actions runner public IP
+        id: get_runner_ip
+        run: echo "RUNNER_IP=$(curl -s https://api.ipify.org)/32" >> $GITHUB_ENV
+
+      - name: Add runner IP to security group ingress (allow SSH)
+        run: |
+          aws ec2 authorize-security-group-ingress --group-id ${{ env.SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ env.RUNNER_IP }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Install Ansible
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3 python3-pip sshpass
+          pip3 install ansible
+
+      - name: Wait for SSH
+        run: |
+          for i in {1..30}; do
+            echo "Checking SSH connectivity to ${{ steps.get_ip.outputs.ec2_ip }} (attempt $i)..."
+            nc -zv ${{ steps.get_ip.outputs.ec2_ip }} 22 && break
+            echo "Waiting for SSH..." && sleep 10
+          done
+
+      - name: Run Ansible Playbook
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | sed 's/\\n/\n/g' > key.pem
+          chmod 600 key.pem
+          echo "[ec2]" > inventory.ini
+          echo "${{ steps.get_ip.outputs.ec2_ip }}" >> inventory.ini
+          ansible-playbook -i inventory.ini ansible/playbook.yml --user ubuntu --private-key key.pem
+
+      - name: Remove runner IP from security group ingress (revoke SSH)
+        if: always()
+        run: |
+          aws ec2 revoke-security-group-ingress --group-id ${{ env.SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ env.RUNNER_IP }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
