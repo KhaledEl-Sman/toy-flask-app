@@ -160,6 +160,40 @@ CI/CD will automatically build, deploy, and configure your app.
 
 ---
 
+## Running Locally with Docker Compose
+
+After cloning the repository, you can start the application locally using Docker Compose. This will build and run the containers defined in the `docker-compose.yml` file.
+
+To run the containers in **detached mode** (in the background), use the following command from the root directory of the project:
+
+```bash
+docker-compose up -d
+```
+
+This command will start all services defined in the compose file in the background, allowing you to continue using your terminal without being attached to the container logs[2][5][7].
+
+### Additional Useful Commands
+
+- To see the running containers:
+
+  ```bash
+  docker ps
+  ```
+
+- To view logs of a specific service (e.g., `web`):
+
+  ```bash
+  docker-compose logs -f web
+  ```
+
+- To stop and remove containers, networks, and volumes created by `up`:
+
+  ```bash
+  docker-compose down
+  ```
+
+---
+
 ## DockerHub Image URL
 
 ```bash
