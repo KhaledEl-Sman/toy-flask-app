@@ -147,12 +147,10 @@ resource "aws_route53_record" "www" {
   records                   = [aws_eip.eip.public_ip]
 }
 
-#  name                      = var.domain_name
-
 resource "aws_route53_record" "root" {
-  zone_id 		    = data.aws_route53_zone.selected.zone_id
-  name    		    = var.domain_name
-  type    		    = "A"
-  ttl    		    = 300
-  records 		    = [aws_eip.eip.public_ip]
+  zone_id                   = data.aws_route53_zone.selected.zone_id
+  name                      = var.domain_name
+  type                      = "A"
+  ttl                       = 300
+  records                   = [aws_eip.eip.public_ip]
 }
