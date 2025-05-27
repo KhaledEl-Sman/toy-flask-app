@@ -1,4 +1,4 @@
-name: Development CI
+name: Development CI/CD
 
 on:
   push:
@@ -77,19 +77,16 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Terraform Init
-<<<<<<< HEAD
         working-directory: ./terraform/dev
         run: terraform init
 
       - name: Terraform Apply
         working-directory: ./terraform/dev
-=======
         working-directory: ./terraform
         run: terraform init
 
       - name: Terraform Apply
         working-directory: ./terraform
->>>>>>> eef008a638678bce4206773ac7920195cdac3e2e
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
