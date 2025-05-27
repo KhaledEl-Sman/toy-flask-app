@@ -1,5 +1,5 @@
 variable "project_name_prefix" {default = "dev-botit"}
-variable "domain_name" {default = "mazzady.club"}
+variable "domain_name" {default = "mazedi.com"}
 variable "vpc_cidr" {default = "10.1.0.0/16"}
 variable "subnet_az" {default = "eu-west-1b"}
 variable "subnet_cidr" {default = "10.1.0.0/20"}
