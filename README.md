@@ -146,8 +146,8 @@ Each environment defines:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/yourrepo.git
-cd yourrepo
+git clone https://github.com/KhaledEl-Sman/toy-flask-app.git
+cd toy-flask-app
 ```
 
 ### 2. Configure Secrets
@@ -160,6 +160,13 @@ CI/CD will automatically build, deploy, and configure your app.
 
 ---
 
+## DockerHub Image URL
+
+```bash
+https://hub.docker.com/repository/docker/elsman2020/toy-flask-app
+```
+
+---
 ## Notes
 
 - **SSH Access**: Only temporarily open for the GitHub Actions runner during deployment.
